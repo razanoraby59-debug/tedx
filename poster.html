@@ -1,0 +1,435 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEDxAASTMT – Board Recruitment</title>
+
+<style>
+:root {
+  --red: #EB0028;
+  --black: #000;
+  --white: #fff;
+  --grey: #b5b5b5;
+  --card: #0f0f0f;
+  --line: #2a2a2a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: #1a1a1a;
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  padding: 24px 12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--white);
+}
+
+/* A3 portrait poster */
+.poster {
+  container-type: inline-size;
+  width: min(100%, 820px);
+  aspect-ratio: 297 / 420;
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 5cqw 6cqw 2cqw;
+  box-shadow: 0 10px 40px rgba(0,0,0,.6);
+}
+
+/* Original red splash retained */
+.poster::before {
+  content: "";
+  position: absolute;
+  top: 5cqw;
+  left: -10cqw;
+  width: 80cqw;
+  height: 45cqw;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(235,0,40,.18),
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.poster > * {
+  position: relative;
+}
+
+/* ---------- Header ---------- */
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3cqw;
+}
+
+.brand {
+  text-align: left;
+  flex: 1;
+}
+
+.tedx {
+  font-size: 14cqw;
+  font-weight: 900;
+  line-height: .9;
+  letter-spacing: -.04em;
+  color: var(--red);
+}
+
+.tedx span {
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.aastmt {
+  font-size: 10cqw;
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.04em;
+  color: var(--white);
+}
+
+.uni {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 35cqw;
+  flex-shrink: 0;
+}
+
+.logo-slot {
+  position: relative;
+  width: 32cqw;
+  height: 24cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1cqw;
+}
+
+.logo-slot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-slot .ph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: .3cqw dashed #555;
+  color: #777;
+  font-size: 1.5cqw;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  line-height: 1.4;
+}
+
+.logo-slot.loaded .ph,
+.qr-slot.loaded .ph {
+  display: none;
+}
+
+.deanery {
+  width: 100%;
+  font-size: 1.8cqw;
+  text-transform: uppercase;
+  color: var(--grey);
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* ---------- Main headline ---------- */
+
+.cta {
+  margin-top: 5cqw;
+  text-align: center;
+}
+
+.cta .eyebrow {
+  display: none;
+}
+
+.cta h1 {
+  font-size: 5cqw;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -.035em;
+}
+
+.cta h1 em {
+  font-style: normal;
+  color: var(--red);
+}
+
+/* ---------- Open positions ---------- */
+
+.positions {
+  width: 100%;
+  margin-top: 5cqw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3cqw;
+  align-items: stretch;
+}
+
+.card {
+  background: var(--card);
+  border: .25cqw solid var(--line);
+  border-top: 1cqw solid var(--red);
+  padding: 3cqw 3cqw 3.5cqw;
+}
+
+.card .num {
+  font-size: 2cqw;
+  letter-spacing: .25em;
+  color: var(--red);
+  font-weight: 700;
+}
+
+.card h2 {
+  margin: 1.5cqw 0 2cqw;
+  font-size: 3.7cqw;
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.card p {
+  font-size: 2.15cqw;
+  line-height: 1.5;
+  color: #d0d0d0;
+}
+
+/* ---------- TEDx introduction ---------- */
+
+.intro {
+  width: 88%;
+  margin: 3cqw auto 0;
+  color: var(--grey);
+  font-size: 2.2cqw;
+  line-height: 1.45;
+  text-align: center;
+  margin-bottom: 18%;
+}
+
+/* ---------- QR code and application CTA ---------- */
+
+
+/* ---------- QR code and application CTA ---------- */
+
+.footer {
+  margin-top: 5cqw;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4cqw;
+  padding: 0 5cqw;
+  transform: translateX(0);
+}
+ 
+.qr-slot {
+  position: relative;
+  width: 30cqw;
+  height:30cqw;
+  flex: none;
+  background: var(--white);
+  padding: 1cqw;
+}
+ 
+.qr-slot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+ 
+.qr-slot .ph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #666;
+  font-size: 1.5cqw;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  line-height: 1.4;
+}
+ 
+.scan {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  text-align: center;
+}
+ 
+.scan h3 {
+  font-size: 5.5cqw;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+ 
+.scan h3 span {
+  color: var(--red);
+}
+ 
+.legal {
+  margin-top: 2cqw;
+  font-size: 1.5cqw;
+  color: var(--grey);
+  text-align: center;
+  letter-spacing: .025em;
+}
+/* ---------- A3 printing ---------- */
+
+@media print {
+  @page {
+    size: A3 portrait;
+    margin: 0;
+  }
+
+  html, body {
+    width: 297mm;
+    height: 420mm;
+    background: #000;
+    padding: 0;
+    margin: 0;
+  }
+
+  body {
+    display: block;
+  }
+
+  .poster {
+    width: 297mm;
+    height: 420mm;
+    aspect-ratio: auto;
+    box-shadow: none;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="poster">
+
+  <!-- Header: TEDxAASTMT and university branding -->
+  <header class="top">
+
+    <div class="brand">
+      <div class="tedx">TED<span>x</span></div>
+      <div class="aastmt">AASTMT</div>
+    </div>
+
+    <div class="uni">
+      <div class="logo-slot" id="logoSlot">
+        <div class="ph">University<br>Logo</div>
+        <img
+          src="pics/download.jpg"
+          alt="University logo"
+          onload="document.getElementById('logoSlot').classList.add('loaded')"
+          onerror="this.style.display='none'"
+        >
+      </div>
+
+      <div class="deanery">Deanery of Student Affairs</div>
+    </div>
+
+  </header>
+
+  <!-- Main headline -->
+  <section class="cta">
+    <br><br><br><br>
+    <h1>
+      Looking for
+      <em>Board</em> Members
+    </h1>
+  </section>
+
+  <!-- Open positions -->
+  <section class="positions">
+
+    <article class="card">
+      <div class="num">01</div>
+
+      <h2>Speakers<br>Coaches</h2>
+
+      <p>
+        Discover inspiring speakers and work with them one-on-one
+        to shape their stories, sharpen their messages, and rehearse
+        confident, unforgettable talks.
+      </p>
+    </article>
+
+    <article class="card">
+      <div class="num">02</div>
+
+      <h2>Operations<br>&amp; PR</h2>
+
+      <p>
+        Coordinate event logistics, venues, schedules, and volunteers
+        while building our reach through sponsorships, partnerships,
+        and public relations.
+      </p>
+    </article>
+
+  </section>
+
+  <!-- Introduction -->
+  <p class="intro">
+    <br>
+    TEDxAASTMT is a student-led platform bringing ideas worth sharing
+    to our campus through thought-provoking talks and events.
+  </p>
+
+  <!-- Application QR code -->
+  <footer class="footer">
+    <div class="qr-slot" id="qrSlot">
+      <div class="ph">Application<br>QR Code</div>
+      <img
+        src="pics/qr.png"
+        alt="Application QR code"
+        onload="document.getElementById('qrSlot').classList.add('loaded')"
+        onerror="this.style.display='none'"
+      >
+    </div>
+
+    <div class="scan">
+      <h3>Scan to<br><span>apply now</span></h3>
+    </div>
+
+  </footer>
+
+</main>
+
+</body>
+</html>
