@@ -341,12 +341,25 @@ footer .logo .aastmt {
   margin-top: 6px;
   color: #777;
 }
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1080 1350' preserveAspectRatio='xMidYMid slice'%3E%3Cpath d='M0 230 L845 738 L1080 350 L1080 860 L775 1350 L475 1350 L695 983 L0 562 Z' fill='%23EB0028' fill-opacity='0.11'/%3E%3C/svg%3E") center / cover no-repeat,
+    #fff;
+}
 
 @media (max-width: 1000px) {
   footer {
     padding-left: 28px;
     padding-right: 28px;
   }
+}
+@media (max-width: 760px) {
+  body::before { background-position: 60% center; }
 }
 
 @media (max-width: 480px) {
@@ -520,72 +533,116 @@ footer .logo .aastmt {
     const toggle = document.getElementById('toggle');
 
     toggle.addEventListener('click', () => {
-      const show = password.type === 'password';
-      password.type = show ? 'text' : 'password';
-      toggle.textContent = show ? 'Hide' : 'Show';
-      toggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        const show = password.type === 'password';
+
+        password.type = show ? 'text' : 'password';
+        toggle.textContent = show ? 'Hide' : 'Show';
+
+        toggle.setAttribute(
+            'aria-label',
+            show ? 'Hide password' : 'Show password'
+        );
     });
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  [email, password].forEach(i => i.classList.remove('invalid'));
-  err.classList.remove('show');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+        [email, password].forEach(input => {
+            input.classList.remove('invalid');
+        });
 
-  if (!emailOk) {
-    email.classList.add('invalid');
-    err.textContent = 'Please enter a valid email address.';
-    err.classList.add('show');
-    email.focus();
-    return;
-  }
+        err.classList.remove('show');
 
-  if (!password.value) {
-    password.classList.add('invalid');
-    err.textContent = 'Please enter your password.';
-    err.classList.add('show');
-    password.focus();
-    return;
-  }
+        const emailValue = email.value.trim();
+        const passwordValue = password.value;
 
-  try {
-    const response = await fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email.value.trim(),
-        password: password.value
-      })
+        const emailOk =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+        if (!emailOk) {
+            email.classList.add('invalid');
+            err.textContent = 'Please enter a valid email address.';
+            err.classList.add('show');
+            email.focus();
+            return;
+        }
+
+        if (!passwordValue) {
+            password.classList.add('invalid');
+            err.textContent = 'Please enter your password.';
+            err.classList.add('show');
+            password.focus();
+            return;
+        }
+
+        const submitButton = form.querySelector(
+            'button[type="submit"]'
+        );
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Logging in...';
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: emailValue,
+                    password: passwordValue
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || 'Login failed.'
+                );
+            }
+
+            if (!data.token) {
+                throw new Error(
+                    'Login succeeded, but no authentication token was received.'
+                );
+            }
+
+            // Store the authentication token.
+            // Remember me = persistent login.
+            // Otherwise = session-only login.
+            if (document.querySelector('[name="remember"]').checked) {
+                localStorage.setItem('authToken', data.token);
+            } else {
+                sessionStorage.setItem('authToken', data.token);
+            }
+
+            // Store basic user information.
+            localStorage.setItem(
+                'loggedInUser',
+                JSON.stringify(data.user)
+            );
+
+            err.style.color = '#1E9E4A';
+            err.style.borderLeftColor = '#1E9E4A';
+            err.style.background = '#eefaf2';
+            err.textContent = 'Login successful! Redirecting...';
+            err.classList.add('show');
+
+            // Redirect to the user's profile.
+            window.location.href = 'profile.html';
+
+        } catch (error) {
+            err.style.color = 'var(--red-dark)';
+            err.style.borderLeftColor = 'var(--red)';
+            err.style.background = '#fff0f2';
+            err.textContent = error.message;
+            err.classList.add('show');
+
+            submitButton.disabled = false;
+            submitButton.textContent = 'Log in';
+
+            console.error('LOGIN ERROR:', error);
+        }
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Login failed.');
-    }
-
-    err.style.color = '#1E9E4A';
-    err.style.borderLeftColor = '#1E9E4A';
-    err.style.background = '#eefaf2';
-    err.textContent = data.message;
-    err.classList.add('show');
-
-    console.log('Logged in user:', data.user);
-
-  } catch (error) {
-    err.style.color = 'var(--red-dark)';
-    err.style.borderLeftColor = 'var(--red)';
-    err.style.background = '#fff0f2';
-    err.textContent = error.message;
-    err.classList.add('show');
-
-    console.error(error);
-  }
-    });
-  </script>
-
-</body>
-</html>
+</script></body></html>
