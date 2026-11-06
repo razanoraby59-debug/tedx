@@ -645,11 +645,12 @@ body::before {
     err.style.color = 'var(--red-dark)';
     err.style.borderLeftColor = 'var(--red)';
     err.style.background = '#fff0f2';
-    err.textContent = 'Could not connect to the server. Make sure your backend is running.';
-    err.classList.add('show');
 
-    console.error(error);
-  }
+    err.textContent = error.message || 'Unknown signup error';
+
+    err.classList.add('show');
+    console.error('SIGNUP ERROR:', error);
+}
 });
   </script>
 
